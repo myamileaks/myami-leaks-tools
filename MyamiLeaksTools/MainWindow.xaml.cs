@@ -85,12 +85,9 @@ public partial class MainWindow : Window
     }
 
     // ── language switch ──────────────────────────────────────────────
-    private void LangEN_Click(object sender, RoutedEventArgs e)
-        => (Application.Current as App)?.SwitchLanguage("en");
-    private void LangES_Click(object sender, RoutedEventArgs e)
-        => (Application.Current as App)?.SwitchLanguage("es");
-    private void LangFR_Click(object sender, RoutedEventArgs e)
-        => (Application.Current as App)?.SwitchLanguage("fr");
+    private void LangEN_Click(object sender, RoutedEventArgs e) => App.SwitchLanguage("en");
+    private void LangES_Click(object sender, RoutedEventArgs e) => App.SwitchLanguage("es");
+    private void LangFR_Click(object sender, RoutedEventArgs e) => App.SwitchLanguage("fr");
 
     // ── discord link ─────────────────────────────────────────────────
     public ICommand OpenDiscordCommand => new RelayCommand(() =>

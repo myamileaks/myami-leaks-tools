@@ -47,7 +47,7 @@ public partial class AIAssistantView : UserControl
         var bubble = new Border
         {
             CornerRadius        = new CornerRadius(12, 12, isUser ? 2 : 12, isUser ? 12 : 2),
-            Padding             = new Thickness(14, 10),
+            Padding             = new Thickness(14, 10, 14, 10),
             Margin              = new Thickness(isUser ? 80 : 0, 4, isUser ? 0 : 80, 4),
             HorizontalAlignment = isUser ? HorizontalAlignment.Right : HorizontalAlignment.Left,
             Background          = isUser ? (Brush)userBg : aiBg,

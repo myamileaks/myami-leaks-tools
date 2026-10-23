@@ -33,8 +33,13 @@ public partial class SkyEditorView : UserControl
     private void Save_Click(object sender, RoutedEventArgs e)
     {
         if (_filePath == null) { Open_Click(sender, e); return; }
-        var colors = new SkyColors(
-            TbZenith.Text.Trim(), TbNadir.Text.Trim(), TbEast.Text.Trim(), "#888888");
+        var colors = new SkyColors
+        {
+            Zenith = TbZenith.Text.Trim(),
+            Nadir  = TbNadir.Text.Trim(),
+            East   = TbEast.Text.Trim(),
+            West   = "#888888"
+        };
         TimecycleParser.WriteSkyColors(_filePath, colors);
         (Application.Current.MainWindow as MainWindow)?.SetStatus("Saved timecycle.");
     }
@@ -65,7 +70,7 @@ public partial class SkyEditorView : UserControl
     {
         if (PresetList.SelectedItem is not ListBoxItem item) return;
         string preset = item.Content?.ToString() ?? "";
-        if (!TimecycleParser.SkyPresets.TryGetValue(preset, out var colors)) return;
+        if (!TimecycleParser.SkyPresets.TryGetValue(preset, out var colors) || colors == null) return;
         _refreshing   = true;
         TbZenith.Text = colors.Zenith;
         TbNadir.Text  = colors.Nadir;

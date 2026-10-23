@@ -75,7 +75,7 @@ public partial class HomeView : UserControl
                 BorderThickness = new Thickness(1),
                 BorderBrush     = new SolidColorBrush(
                     (Color)ColorConverter.ConvertFromString(accent ?? "#1E1E28")),
-                Padding = new Thickness(14, 12),
+                Padding = new Thickness(14, 12, 14, 12),
                 Cursor  = Cursors.Hand,
                 Effect  = new DropShadowEffect
                 {
