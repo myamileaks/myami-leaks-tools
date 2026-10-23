@@ -1,0 +1,107 @@
+<UserControl x:Class="MyamiLeaksTools.Views.ParticlesEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgDeep}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource BgPanel}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1"
+                Padding="16,10">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open Particle XML" Style="{StaticResource BtnGhost}"
+                        Click="OpenFile_Click" Margin="0,0,8,0"/>
+                <Button Content="Save" Style="{StaticResource BtnPrimary}"
+                        Click="Save_Click" Margin="0,0,8,0"/>
+                <Button Content="Batch Recolor" Style="{StaticResource BtnGhost}"
+                        Click="BatchRecolor_Click" Margin="0,0,8,0"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="280"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- particle list -->
+            <Border Style="{StaticResource Card}" Grid.Column="0" Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Padding="12,8" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1">
+                        <TextBox x:Name="SearchBox" PlaceholderText="Search effects..."
+                                 TextChanged="Search_Changed"/>
+                    </Border>
+                    <DataGrid x:Name="ParticleGrid" Grid.Row="1"
+                              Background="Transparent" BorderThickness="0"
+                              GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="{StaticResource BorderSubtle}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              RowBackground="{StaticResource BgPanel}"
+                              AlternatingRowBackground="{StaticResource BgCard}"
+                              Foreground="{StaticResource TextPrimary}"
+                              FontFamily="Consolas" FontSize="11"
+                              SelectionChanged="ParticleGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Effect" Binding="{Binding EffectName}" Width="*"/>
+                            <DataGridTextColumn Header="Field" Binding="{Binding FieldName}" Width="120"/>
+                            <DataGridTemplateColumn Header="Color" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Height="16" Width="50" CornerRadius="3"
+                                                Margin="4,2">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="{Binding HexMin}"/>
+                                            </Border.Background>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="R" Binding="{Binding R, StringFormat=F3}" Width="50"/>
+                            <DataGridTextColumn Header="G" Binding="{Binding G, StringFormat=F3}" Width="50"/>
+                            <DataGridTextColumn Header="B" Binding="{Binding B, StringFormat=F3}" Width="50"/>
+                            <DataGridTextColumn Header="A" Binding="{Binding A, StringFormat=F3}" Width="50"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- edit panel -->
+            <Border Grid.Column="2" Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="EDIT ENTRY" Foreground="{StaticResource TextMuted}"
+                               FontSize="10" FontWeight="SemiBold" Margin="0,0,0,12"/>
+
+                    <Label Content="R (0–1)"/>
+                    <Slider x:Name="SlR" Minimum="0" Maximum="1" Value="0.5"
+                            ValueChanged="Channel_Changed" Margin="0,2,0,8"/>
+
+                    <Label Content="G (0–1)"/>
+                    <Slider x:Name="SlG" Minimum="0" Maximum="1" Value="0.5"
+                            ValueChanged="Channel_Changed" Margin="0,2,0,8"/>
+
+                    <Label Content="B (0–1)"/>
+                    <Slider x:Name="SlB" Minimum="0" Maximum="1" Value="0.5"
+                            ValueChanged="Channel_Changed" Margin="0,2,0,8"/>
+
+                    <Label Content="Alpha (0–1)"/>
+                    <Slider x:Name="SlA" Minimum="0" Maximum="1" Value="1.0"
+                            ValueChanged="Channel_Changed" Margin="0,2,0,16"/>
+
+                    <Border x:Name="ColorSwatch" Height="60" CornerRadius="8"
+                            Background="#808080" Margin="0,0,0,16"/>
+
+                    <Button Content="Apply to Selection" Style="{StaticResource BtnPrimary}"
+                            Click="ApplyToSelection_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

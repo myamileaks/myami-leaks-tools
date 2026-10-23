@@ -1,0 +1,70 @@
+<UserControl x:Class="MyamiLeaksTools.Views.BloodFXEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgDeep}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{StaticResource BgPanel}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1" Padding="16,10">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open Blood Particle XML" Style="{StaticResource BtnGhost}" Click="Open_Click" Margin="0,0,8,0"/>
+                <Button Content="Apply Blood Color" Style="{StaticResource BtnPrimary}" Click="Apply_Click" Margin="0,0,8,0"/>
+                <Button Content="Save" Style="{StaticResource BtnGhost}" Click="Save_Click"/>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="BLOOD COLOR" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="SemiBold" Margin="0,0,0,12"/>
+                        <Label Content="Red (R)"/>
+                        <Slider x:Name="SlR" Minimum="0" Maximum="1" Value="0.6" Margin="0,2,0,8"/>
+                        <Label Content="Green (G)"/>
+                        <Slider x:Name="SlG" Minimum="0" Maximum="1" Value="0.0" Margin="0,2,0,8"/>
+                        <Label Content="Blue (B)"/>
+                        <Slider x:Name="SlB" Minimum="0" Maximum="1" Value="0.05" Margin="0,2,0,8"/>
+                        <Label Content="Alpha"/>
+                        <Slider x:Name="SlA" Minimum="0" Maximum="1" Value="1.0" Margin="0,2,0,12"/>
+                        <Border x:Name="Swatch" Height="50" CornerRadius="6" Background="#991000"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="PRESETS" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                        <Button Content="Normal Blood" Style="{StaticResource BtnGhost}" Margin="0,0,0,4" Click="PresetNormal_Click"/>
+                        <Button Content="Dark Blood" Style="{StaticResource BtnGhost}" Margin="0,0,0,4" Click="PresetDark_Click"/>
+                        <Button Content="Neon Green" Style="{StaticResource BtnGhost}" Margin="0,0,0,4" Click="PresetNeon_Click"/>
+                        <Button Content="Black" Style="{StaticResource BtnGhost}" Margin="0,0,0,4" Click="PresetBlack_Click"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <Border Grid.Column="2" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="EFFECT LIST — Blood Particle Entries" Foreground="{StaticResource TextMuted}" FontSize="10" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ListBox x:Name="EffectList" Grid.Row="1" Background="Transparent" BorderThickness="0"
+                             Foreground="{StaticResource TextPrimary}" FontFamily="Consolas" FontSize="11">
+                        <ListBoxItem Content="ped_blood_impact"/>
+                        <ListBoxItem Content="ped_blood_squirt"/>
+                        <ListBoxItem Content="ped_blood_spray"/>
+                        <ListBoxItem Content="ped_blood_pool"/>
+                        <ListBoxItem Content="ped_blood_drip"/>
+                        <ListBoxItem Content="ped_blood_splat"/>
+                        <ListBoxItem Content="ped_blood_mist"/>
+                        <ListBoxItem Content="ped_wound_blood"/>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

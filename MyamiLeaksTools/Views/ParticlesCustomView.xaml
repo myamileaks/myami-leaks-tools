@@ -1,0 +1,31 @@
+<UserControl x:Class="MyamiLeaksTools.Views.ParticlesCustomView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgDeep}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{StaticResource BgPanel}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1" Padding="16,10">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open Particle XML" Style="{StaticResource BtnGhost}" Click="Primary_Click" Margin="0,0,8,0"/>
+                <Button Content="Save / Apply" Style="{StaticResource BtnPrimary}" Click="Apply_Click"/>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="1" Margin="16">
+            <Border Style="{StaticResource Card}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Particles Custom" Foreground="{StaticResource TextPrimary}"
+                               FontSize="20" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,8"/>
+                    <TextBlock Text="Apply fully custom per-effect particle color overrides to all effects in a pack"
+                               Foreground="{StaticResource TextSecondary}" FontSize="13"
+                               TextAlignment="Center" TextWrapping="Wrap" MaxWidth="480"
+                               Margin="0,0,0,24"/>
+                    <Button Content="Open Particle XML" Style="{StaticResource BtnPrimary}"
+                            HorizontalAlignment="Center" Click="Primary_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

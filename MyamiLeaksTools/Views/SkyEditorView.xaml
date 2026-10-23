@@ -1,0 +1,256 @@
+<UserControl x:Class="MyamiLeaksTools.Views.SkyEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page header -->
+        <Border Grid.Row="0" Padding="24,16" BorderBrush="{StaticResource BorderSubtle}"
+                BorderThickness="0,0,0,1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#0C0810" Offset="0"/>
+                    <GradientStop Color="#080810" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!-- icon tile -->
+                <Border Width="44" Height="44" CornerRadius="10" Margin="0,0,14,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#2A1840" Offset="0"/>
+                            <GradientStop Color="#1A0C28" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <TextBlock Text="◎" FontSize="20" HorizontalAlignment="Center"
+                               VerticalAlignment="Center" Foreground="White"/>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource PageTitle}" Text="SKY EDITOR"/>
+                    <TextBlock Style="{StaticResource PageSubtitle}"
+                               Text="Edit zenith/nadir sky colors per GTA V weather state"/>
+                </StackPanel>
+                <!-- toolbar -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Open XML" Style="{StaticResource BtnGhost}"
+                            Click="Open_Click" Margin="0,0,8,0"/>
+                    <Button Content="Save" Style="{StaticResource BtnPrimary}"
+                            Click="Save_Click" Margin="0,0,8,0"/>
+                    <Button Content="Reset" Style="{StaticResource BtnGhost}"
+                            Click="Reset_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 3-column layout: asset browser | preview | properties -->
+        <Grid Grid.Row="1" Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT: asset browser / presets -->
+            <Border Style="{StaticResource Card}" Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="PRESETS" Foreground="{StaticResource TextMuted}"
+                               FontSize="9" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <ListBox x:Name="PresetList" Grid.Row="1"
+                             Background="Transparent" BorderThickness="0"
+                             SelectionChanged="Preset_Changed">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+                                <Setter Property="FontFamily" Value="Segoe UI"/>
+                                <Setter Property="FontSize" Value="11.5"/>
+                                <Setter Property="Padding" Value="8,6"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                                    CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="Background"
+                                                            Value="{StaticResource BgHover}"/>
+                                                    <Setter Property="Foreground"
+                                                            Value="{StaticResource TextPrimary}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Bd" Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="#3C0610" Offset="0"/>
+                                                                <GradientStop Color="#1C1C22" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Foreground"
+                                                            Value="{StaticResource TextPrimary}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBoxItem Content="EXTRASUNNY"/>
+                        <ListBoxItem Content="CLEAR"/>
+                        <ListBoxItem Content="CLOUDS"/>
+                        <ListBoxItem Content="SMOG"/>
+                        <ListBoxItem Content="FOGGY"/>
+                        <ListBoxItem Content="OVERCAST"/>
+                        <ListBoxItem Content="RAIN"/>
+                        <ListBoxItem Content="THUNDER"/>
+                        <ListBoxItem Content="SNOW"/>
+                        <ListBoxItem Content="BLIZZARD"/>
+                        <ListBoxItem Content="CUSTOM"/>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- CENTER: sky preview -->
+            <Border Style="{StaticResource Card}" Grid.Column="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="PREVIEW" Foreground="{StaticResource TextMuted}"
+                               FontSize="9" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                    <!-- sky gradient preview -->
+                    <Border Grid.Row="1" CornerRadius="8" ClipToBounds="True">
+                        <Grid>
+                            <Border x:Name="SkyGradient" CornerRadius="8">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop x:Name="ZenithStop" Color="#1A3A8A" Offset="0"/>
+                                        <GradientStop x:Name="NadirStop" Color="#E8A030" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <!-- horizon glow -->
+                            <Border VerticalAlignment="Bottom" Height="60">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="Transparent" Offset="0"/>
+                                        <GradientStop x:Name="HorizonGlow" Color="#60E0A020" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <!-- sun -->
+                            <Ellipse x:Name="SunEllipse" Width="48" Height="48"
+                                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                     Margin="0,0,0,40">
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Color="#FFFFC0" Offset="0"/>
+                                        <GradientStop Color="Transparent" Offset="1"/>
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="#FFFF80" BlurRadius="20"
+                                                      ShadowDepth="0" Opacity="0.8"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Grid>
+                    </Border>
+
+                    <!-- quick apply -->
+                    <Button Grid.Row="2" Content="Apply to File" Style="{StaticResource BtnPrimary}"
+                            Margin="0,10,0,0" Click="Apply_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- RIGHT: properties -->
+            <Border Style="{StaticResource Card}" Grid.Column="4">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="SKY COLORS" Foreground="{StaticResource TextMuted}"
+                                   FontSize="9" FontWeight="Bold" Margin="0,0,0,12"/>
+
+                        <!-- Zenith -->
+                        <TextBlock Text="Zenith Color" Foreground="{StaticResource TextSecondary}"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="32"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TbZenith" Text="#1A3A8A"
+                                     TextChanged="Color_TextChanged"/>
+                            <Border x:Name="SwatchZenith" Grid.Column="1" Margin="4,0,0,0"
+                                    CornerRadius="5" Background="#1A3A8A" Cursor="Hand"
+                                    MouseLeftButtonUp="Swatch_Click" Tag="Zenith"/>
+                        </Grid>
+
+                        <!-- Nadir -->
+                        <TextBlock Text="Nadir Color" Foreground="{StaticResource TextSecondary}"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="32"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TbNadir" Text="#E8A030"
+                                     TextChanged="Color_TextChanged"/>
+                            <Border x:Name="SwatchNadir" Grid.Column="1" Margin="4,0,0,0"
+                                    CornerRadius="5" Background="#E8A030" Cursor="Hand"
+                                    MouseLeftButtonUp="Swatch_Click" Tag="Nadir"/>
+                        </Grid>
+
+                        <!-- East -->
+                        <TextBlock Text="East Color" Foreground="{StaticResource TextSecondary}"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="32"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TbEast" Text="#C86018"
+                                     TextChanged="Color_TextChanged"/>
+                            <Border x:Name="SwatchEast" Grid.Column="1" Margin="4,0,0,0"
+                                    CornerRadius="5" Background="#C86018" Cursor="Hand"
+                                    MouseLeftButtonUp="Swatch_Click" Tag="East"/>
+                        </Grid>
+
+                        <!-- West -->
+                        <TextBlock Text="West Color" Foreground="{StaticResource TextSecondary}"
+                                   FontSize="11" Margin="0,0,0,20"/>
+
+                        <Separator/>
+
+                        <!-- Intensity -->
+                        <TextBlock Text="LIGHTING" Foreground="{StaticResource TextMuted}"
+                                   FontSize="9" FontWeight="Bold" Margin="0,8,0,10"/>
+                        <Label Content="Sun Intensity"/>
+                        <Slider Minimum="0" Maximum="10" Value="4.5" Margin="0,2,0,10"/>
+                        <Label Content="Sky Brightness"/>
+                        <Slider Minimum="0" Maximum="2" Value="1.0" Margin="0,2,0,10"/>
+                        <Label Content="Horizon Fade"/>
+                        <Slider Minimum="0" Maximum="1" Value="0.5" Margin="0,2,0,10"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

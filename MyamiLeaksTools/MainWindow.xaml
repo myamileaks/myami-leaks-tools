@@ -1,0 +1,426 @@
+<Window x:Class="MyamiLeaksTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Myami Leaks Tools"
+        Height="780" Width="1200"
+        MinHeight="600" MinWidth="900"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Sidebar group header style -->
+        <Style x:Key="NavGroupLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#383858"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="18,12,0,3"/>
+        </Style>
+        <!-- Window control button -->
+        <Style x:Key="WinBtn" TargetType="Button">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#505070"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1E1E28"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="WinBtnClose" BasedOn="{StaticResource WinBtn}" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#CC1020"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Lang button -->
+        <Style x:Key="LangBtn" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#505070"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="7,3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                BorderBrush="#1E1E28" BorderThickness="1" CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#18181E"/>
+                                <Setter Property="Foreground" Value="#CC1020"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#4A0810"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer shell with drop shadow -->
+    <Border CornerRadius="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="32" ShadowDepth="8" Opacity="0.85"/>
+        </Border.Effect>
+        <Border CornerRadius="12" ClipToBounds="True">
+            <!-- Abstract black-and-red background -->
+            <Grid>
+                <!-- Base deep black -->
+                <Border Background="#050508"/>
+                <!-- Red radial glow top-right -->
+                <Border>
+                    <Border.Background>
+                        <RadialGradientBrush Center="0.85,0.05" RadiusX="0.45" RadiusY="0.55">
+                            <GradientStop Color="#1A0305" Offset="0"/>
+                            <GradientStop Color="Transparent" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Border.Background>
+                </Border>
+                <!-- Red radial glow bottom-left -->
+                <Border>
+                    <Border.Background>
+                        <RadialGradientBrush Center="0.1,0.9" RadiusX="0.35" RadiusY="0.35">
+                            <GradientStop Color="#120205" Offset="0"/>
+                            <GradientStop Color="Transparent" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Border.Background>
+                </Border>
+
+                <!-- Main app layout -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="210"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="44"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="26"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- ── TITLEBAR ── -->
+                    <Border Grid.ColumnSpan="2"
+                            Background="{StaticResource HeaderGradient}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="0,0,0,1"
+                            MouseLeftButtonDown="TitleBar_MouseDown">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Logo + brand -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                        Margin="14,0,0,0" VerticalAlignment="Center">
+                                <!-- Diamond SVG mark -->
+                                <Viewbox Width="18" Height="18" Margin="0,0,8,0">
+                                    <Canvas Width="24" Height="24">
+                                        <Polygon Points="12,1 23,7 23,17 12,23 1,17 1,7"
+                                                 Stroke="#CC1020" StrokeThickness="1.5" Fill="#1A0308"/>
+                                        <Polygon Points="12,5 19,9 19,15 12,19 5,15 5,9"
+                                                 Fill="#CC1020" Opacity="0.35"/>
+                                        <Line X1="12" Y1="1" X2="12" Y2="23"
+                                              Stroke="#FF2850" StrokeThickness="0.8" Opacity="0.6"/>
+                                        <Line X1="1" Y1="12" X2="23" Y2="12"
+                                              Stroke="#FF2850" StrokeThickness="0.8" Opacity="0.4"/>
+                                    </Canvas>
+                                </Viewbox>
+                                <!-- MYAMI LEAKS gradient text -->
+                                <TextBlock FontFamily="Segoe UI" FontSize="13" FontWeight="Black"
+                                           VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <TextBlock.Foreground>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#FF2850" Offset="0"/>
+                                            <GradientStop Color="#CC1020" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </TextBlock.Foreground>MYAMI LEAKS
+                                </TextBlock>
+                                <!-- discord link -->
+                                <TextBlock x:Name="DiscordLink" Text="discord.gg/myami"
+                                           FontFamily="Segoe UI" FontSize="10.5"
+                                           Foreground="#384058"
+                                           VerticalAlignment="Center" Cursor="Hand">
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick"
+                                                      Command="{Binding OpenDiscordCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- License badge — center-right -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                        VerticalAlignment="Center" Margin="0,0,12,0">
+                                <!-- lang buttons -->
+                                <Button Content="EN" Style="{StaticResource LangBtn}"
+                                        Click="LangEN_Click" Margin="0,0,3,0"/>
+                                <Button Content="ES" Style="{StaticResource LangBtn}"
+                                        Click="LangES_Click" Margin="0,0,3,0"/>
+                                <Button Content="FR" Style="{StaticResource LangBtn}"
+                                        Click="LangFR_Click" Margin="0,0,14,0"/>
+                                <!-- license id -->
+                                <Border Background="#0C0C0F" BorderBrush="#1E1E28"
+                                        BorderThickness="1" CornerRadius="5" Padding="8,3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="ML-" FontFamily="Consolas"
+                                                   FontSize="10" Foreground="#383855"/>
+                                        <TextBlock Text="PREMIUM" FontFamily="Consolas"
+                                                   FontSize="10" Foreground="#505075"/>
+                                        <TextBlock Text=" · " Foreground="#252535" FontSize="10"/>
+                                        <Ellipse Width="6" Height="6" Fill="#30CC70"
+                                                 VerticalAlignment="Center" Margin="0,0,5,0">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect Color="#30CC70" BlurRadius="5"
+                                                                  ShadowDepth="0" Opacity="1"/>
+                                            </Ellipse.Effect>
+                                        </Ellipse>
+                                        <TextBlock Text="Never expires" FontFamily="Segoe UI"
+                                                   FontSize="10" Foreground="#30CC70"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Window buttons -->
+                            <StackPanel Grid.Column="3" Orientation="Horizontal"
+                                        VerticalAlignment="Center" Margin="0,0,6,0">
+                                <Button Style="{StaticResource WinBtn}" Content="&#xE921;"
+                                        Click="Minimize_Click" ToolTip="Minimize"/>
+                                <Button Style="{StaticResource WinBtn}" Content="&#xE922;"
+                                        Click="Maximize_Click" ToolTip="Maximize" Margin="3,0"/>
+                                <Button Style="{StaticResource WinBtnClose}" Content="&#xE8BB;"
+                                        Click="Close_Click" ToolTip="Close"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ── SIDEBAR ── -->
+                    <Border Grid.Row="1" Grid.Column="0"
+                            Background="{StaticResource SidebarGradient}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="0,0,1,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel Margin="0,6,0,0">
+
+                                    <!-- Home -->
+                                    <RadioButton Style="{StaticResource NavItem}"
+                                                 IsChecked="True" Tag="Home"
+                                                 Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⌂" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Home" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- VISUAL -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="VISUAL"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Sky" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="◎" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Sky}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Timecycle" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="◑" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Timecycle}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="AnimSky" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="▷" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_AnimSky}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Stables" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⬡" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Stables}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- EFFECTS -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="EFFECTS"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="BloodFX" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="◈" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_BloodFX}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Particles" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="✦" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Particles}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Tracer" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⟶" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Tracer}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="ParticlesCustom" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="✧" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_ParticlesCustom}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Snow" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="❅" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Snow}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- FILES -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="FILES"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="RPF" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⊞" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_RPF}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="RPFProtect" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⊡" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_RPFProtect}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="GenD10" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⚄" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_GenD10}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Ramps" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⧲" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Ramps}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- AUDIO -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="AUDIO"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="SoundPack" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="♪" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_SoundPack}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- PERFORMANCE -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="PERFORMANCE"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="Performance" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="⚡" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_Performance}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <!-- AI -->
+                                    <TextBlock Style="{StaticResource NavGroupLabel}" Text="AI"/>
+                                    <RadioButton Style="{StaticResource NavItem}" Tag="AI" Checked="Nav_Checked">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="◈" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{DynamicResource Nav_AI}" FontSize="12" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </RadioButton>
+
+                                    <Rectangle Height="16"/>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- Sidebar footer -->
+                            <Border Grid.Row="1" BorderBrush="{StaticResource BorderSubtle}"
+                                    BorderThickness="0,1,0,0" Padding="14,10">
+                                <StackPanel>
+                                    <TextBlock Text="MYAMI LEAKS" FontFamily="Segoe UI"
+                                               FontSize="9" FontWeight="Bold"
+                                               Foreground="#252535" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="v2.0 · discord.gg/myami" FontFamily="Segoe UI"
+                                               FontSize="9" Foreground="#1E1E2E"
+                                               HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- ── CONTENT AREA ── -->
+                    <ContentControl x:Name="ContentArea"
+                                    Grid.Row="1" Grid.Column="1"
+                                    Background="{StaticResource BgDeep}"/>
+
+                    <!-- ── STATUS BAR ── -->
+                    <Border Grid.Row="2" Grid.ColumnSpan="2"
+                            Background="{StaticResource BgPanel}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="0,1,0,0" Padding="16,0">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Ellipse x:Name="StatusDot" Width="6" Height="6"
+                                         Fill="{StaticResource Success}" Margin="0,0,8,0">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Color="#30CC70" BlurRadius="4"
+                                                          ShadowDepth="0" Opacity="0.9"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <TextBlock x:Name="StatusText" Text="Ready"
+                                           FontFamily="Segoe UI" FontSize="11"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="MYAMI LEAKS TOOLS · GTA V / FiveM"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       FontFamily="Segoe UI" FontSize="9.5"
+                                       Foreground="{StaticResource TextMuted}"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

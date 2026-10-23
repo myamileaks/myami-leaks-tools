@@ -1,0 +1,50 @@
+<UserControl x:Class="MyamiLeaksTools.Views.AIAssistantView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgDeep}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        <Border Grid.Row="0" Background="{StaticResource BgPanel}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1" Padding="20,14">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="{StaticResource Accent}" CornerRadius="4"
+                            Padding="6,3" Margin="0,0,10,0">
+                        <TextBlock Text="AI" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                    </Border>
+                    <TextBlock Text="Tokkyo AI Assistant" FontSize="15" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="GTA V modding, particle recolor, FiveM pack help — ask anything."
+                           Foreground="{StaticResource TextSecondary}" FontSize="11" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- chat history -->
+        <ScrollViewer Grid.Row="1" x:Name="ChatScroll"
+                      VerticalScrollBarVisibility="Auto" Padding="20,12">
+            <StackPanel x:Name="ChatHistory"/>
+        </ScrollViewer>
+
+        <!-- input bar -->
+        <Border Grid.Row="2" Background="{StaticResource BgPanel}"
+                BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,1,0,0" Padding="16,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="InputBox" PlaceholderText="Ask about particles, timecycles, RPF, FiveM..."
+                         KeyDown="Input_KeyDown" FontSize="13"
+                         Padding="12,8" MinHeight="38"/>
+                <Button Grid.Column="1" Content="Send" Style="{StaticResource BtnPrimary}"
+                        Margin="8,0,0,0" Padding="20,8" Click="Send_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
