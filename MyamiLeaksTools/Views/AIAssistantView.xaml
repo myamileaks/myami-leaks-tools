@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="InputBox" PlaceholderText="Ask about particles, timecycles, RPF, FiveM..."
+                <TextBox x:Name="InputBox" Tag="Ask about particles, timecycles, RPF, FiveM..."
                          KeyDown="Input_KeyDown" FontSize="13"
                          Padding="12,8" MinHeight="38"/>
                 <Button Grid.Column="1" Content="Send" Style="{StaticResource BtnPrimary}"
