@@ -13,9 +13,9 @@ public record SkyColors
     public string West   { get; init; } = "#3A1A2A";
 }
 
-public static class SkyPresets
+internal static class SkyPresets2
 {
-    private static readonly Dictionary<string, SkyColors> _presets = new()
+    internal static readonly Dictionary<string, SkyColors> _presets = new()
     {
         ["EXTRASUNNY"] = new() { Zenith="#1A3A6A", Nadir="#0A1A3A", East="#2A4A6A", West="#3A2A1A" },
         ["CLEAR"]      = new() { Zenith="#1E3A60", Nadir="#0E1E38", East="#243A5A", West="#30241A" },
@@ -32,7 +32,7 @@ public static class SkyPresets
         ["NEUTRAL"]    = new() { Zenith="#2A2A2A", Nadir="#141414", East="#282828", West="#2A2828" },
     };
 
-    public static SkyColors Get(string name) =>
+    internal static SkyColors Get(string name) =>
         _presets.TryGetValue(name, out var c) ? c : _presets["EXTRASUNNY"];
 }
 
@@ -40,8 +40,10 @@ public static class SkyPresets
 
 public class TimecycleParser
 {
+    public static Dictionary<string, SkyColors> SkyPresets => SkyPresets2._presets;
+
     // Reads sky zenith/nadir/east/west from a GTA V timecycle_v.xml
-    public SkyColors ParseSkyColors(string xmlPath)
+    public static SkyColors ParseSkyColors(string xmlPath)
     {
         var doc   = XDocument.Load(xmlPath);
         var root  = doc.Root ?? throw new InvalidDataException("Empty XML");
@@ -56,7 +58,7 @@ public class TimecycleParser
         return new SkyColors { Zenith=zenith, Nadir=nadir, East=east, West=west };
     }
 
-    public void WriteSkyColors(string xmlPath, SkyColors colors)
+    public static void WriteSkyColors(string xmlPath, SkyColors colors)
     {
         // if file doesn't exist or isn't a timecycle, create a stub
         XDocument doc;
