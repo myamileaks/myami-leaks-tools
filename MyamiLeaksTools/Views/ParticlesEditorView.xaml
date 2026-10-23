@@ -35,7 +35,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Border Padding="12,8" BorderBrush="{StaticResource BorderSubtle}" BorderThickness="0,0,0,1">
-                        <TextBox x:Name="SearchBox" PlaceholderText="Search effects..."
+                        <TextBox x:Name="SearchBox" Tag="Search effects..."
                                  TextChanged="Search_Changed"/>
                     </Border>
                     <DataGrid x:Name="ParticleGrid" Grid.Row="1"
